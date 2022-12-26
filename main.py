@@ -7,10 +7,15 @@ import math
 
 #mendefine pin yang akan digunakan
 PIN_27 = 27
+
 #mendefine led yang akan digunakan
-PIN_20 = 20 # kuning
-PIN_19 = 19 # merah
-PIN_18 = 18 # hijau
+PIN_20 = 20
+
+#mendefine buzzer
+PIN_11 = 11
+
+#define infrared
+PIN_10 = 10
 
 def mapping(rad):
         x = math.sin(rad / 4)
@@ -23,10 +28,14 @@ def main():
     #mengambil nilai ldr sebagain inputan
     photo = ADC(PIN_27)
     
+    #mengambil inputan infrared
+    infrared = Pin(PIN_10, Pin.IN)
+    
     #mengambil lampu RGB sebagai output
-    kuning = Pin(PIN_20, Pin.OUT)
-    merah = Pin(PIN_19, Pin.OUT)
-    hijau = Pin(PIN_18, Pin.OUT)
+    Led = Pin(PIN_20, Pin.OUT)
+    
+    #Mengambil Buzzer
+    buzz = Pin(PIN_11,PIN.OUT)
     
     terang = 0
     gelap = 0
@@ -53,8 +62,14 @@ def main():
             gelap = 0
             redup = 0
             terang = 1
-    
-        print(gelap, redup, terang, y, sep=' ')
+
+        if infrared.value() == 1:
+            print("HELLO")
+        else:
+            if gelap < 1 and terang == 1:
+                Led.value(0)
+            elif gelap == 1 and terang < 1:
+                Led.value(1)
         
         #melakukan sleep machine, ini berfungsi sebagai safe counter
         utime.sleep(0.5)
